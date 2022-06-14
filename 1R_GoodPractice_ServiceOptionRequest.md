@@ -139,141 +139,63 @@ A ***serviceOptionRequest*** can be added for any logistic object consolidating 
 |Example| A forwarder (booker) wants ULD 123 to be routed to handover point X upon unloading on apron by GHA (provider)
 |Purpose| Booking generic services and letting stakeholders know if a generic service is booked
 |Provider of data	| Object Owner (Focus LO), Booker (***serviceOptionRequest***) and provider (***serviceProduct***, ***serviceOption***)
-|Target Group / Data consumers | Any ONE Record user involved with physical processes
+|Target Group | Any ONE Record user involved with physical processes
 
 The following diagram shows the relevant data fields in the ONE Record data model:
 
-![DataModel](docs/dm2.svg) 
+![DataModel](docs/dm2.svg)
 
-## transportMovement LO
+## piece LO - !!!
 
-The TransportMovement directly contains emission-relevant data: The ***distanceMeasured***, the ***distanceCalculated***, the ***fuelType***, the ***fuelAmountMeasured***, the ***fuelAmountCalculated*** and a link towards the correlating CO2-Emissions ***CO2Emissions*** (1:n link).
-
-### Data fields: distanceMeasured and distanceCalculated
-
-If available, the actually measured distance is provided in the ***distanceMeasured*** data field. Only if not available, the ***distanceCalculated*** data field should be populated.
-
-### Data field: fuelType
-
-The ***fuelType*** data field should indicate the fuel that was consumed for this ***transportMovement***. "Kerosene", "SAF", "Renewable electric energy" are examples for possible values ***no standardized list, list by ISO expected; Moritz: standard-liste Referenz***. 
-1:n
-***Energy Carrier***
-***FeedStock***
-***FeedStockShare***
-Data exchange guidance Table 6 (Mail vom 29.4.2022)
-
-### Data fields: fuelAmountMeasured and fuelAmountCalculated
-
-If available, the actually measured fuel consumption is provided in the ***fuelAmountMeasured*** data field. Only if not available, the ***fuelAmountCalculated*** data field should be populated.
-
-### Data field: totalLoadedWeight
-
-TBD: the total transportation weight is required for climate relevant emission monitoring. Question: How do we deal with this? 
-
-Option 1: Assume shipments are not split, so it is the sum of all totalGrossWeighs of the Shipments. Pro: Realistic and exact, con: doesn´t work if shipments are split
-
-Option 2: Sum the pieces on truck. Pro: easy to calculate; con: is not correct (total gross weight is usually higher with additional loading equipment), Piece info often missing
-
-Option 3: create a new measured value totalLoadedWeight; most accurate, but also available?
-
-## payloadDistance LO
-
-The ***payloadDistance*** LO describes the relevant factor for the climateImpact calculation on a truck.
-
-### Data field: payloadDistanceResult (value)
-
-The payloadDistanceResult is a most relevant parameter for the estimation of the climate impact of this transportMovement. It is usually calculated by multiplying the weight and the distance of the transportMovement. Possible units are kilogram-kilometre ("kgkm"), tonne-kilometre ("tkm"), kilometre-tonne ("kmt") and "ton-mile", which is in the US: 1 ton-mile * ( 0.907185 t / short ton) * ( 1.609344 km / mile ) = 1.460 tkm.
-
-### ISOTransparencyLevel (int)
-
-This parameter shows the level of parameters to be included. 
-
-TBD here, e.g. is there a level including the deadhead legs? Etc.
-
-### FuelConsumptionParameter
-
-This indicator can be either "measured" or "calculated". It describes the calculation basis for the calculation result, and not the data basis, which can be found in the the ***fuelAmountMeasured*** and ***fuelAmountCalculated*** of the transportMovement (TBD: Obsolete due to the ISO Levels bringing clear indicators here?).
-
-### DistanceParameter
-
-This indicator can be either "measured" or "calculated". It describes the calculation basis for the calculation result, and not the data basis, which can be found in the the ***distanceMeasured*** and ***distanceCalculated*** of the transportMovement (TBD: Obsolete due to the ISO Levels bringing clear indicators here?)
-
-### CO2CoefficiencyFactor
-
-**tbd** required?
-
-### Other data fields
-
-Other data fields like ***departureLocation*** and ***arrivalLocation*** could be used to verify the CO2-Emission relevant data sources. Additionally, relevant information could be added as an ***externalReference***, if only available as PDF. This could also be used for an image or a GPS-track of the geo-locational movement to provide an additional layer of information.
-
-The ***movementType*** has a special relevance here, as it indicates wether this is a planned transport movement or an already  performed one.
-
-## transportMeans LO
-
-The ***transportMeans*** describes the means of transportation used to perfom for the linked transportMovement. Classical examples are a truck that performs a road leg for a transportation from the forwarder´s hub to the carrier´s origin airport, or a Boeing 777 freighter to perform a flight from Frankfurt to Rio de Janeiro. 
-
-### Data field: typicalFuelConsumption
-
-The ***typicalFuelConsumption*** describes an average amount of fuel for a defined distance, e.g. 12 l / 100 km. This does not include the type of fuel, as one of the assumptions is that the consumption doesn´t depend on the type of fuel. When using this, the ***unit*** data field is quite extensively used, with a content like "l/100km".
-
-### Data field: typicalCO2Coefficient
-
-The ***typicalCO2Coefficient*** describes ??? required?
-
-### Data field: 
-
-## piece LO
-
-The Piece is the central unit of the ONE Record data model, and thus climate impact should be calculated and published on this level. If no detailed piece information is available, the total gross weight of the shipment is evenly distributed amoungst the pieces of the shipment. The total number of pieces should also be known. If the weights of individual pieces are known, they must be taken into account.
-
-
-### Data field: grossWeight
-
-The data field ***grossWeight*** within the piece LO describes the weight of the piece, and thus is to be used for the impact calculation
+Holds general data about a given piece which may be included for determining whether a specific service can be provided or not or calculating service prices. ***skeletonBy*** holds the company (@Philipp: richtig?) that has created a skeleton. Links towards any number of serviceOptionRequests (1:n or n:n link).
 
 ### Data field: skeletonBy
 
-The data field ***skeletonBy*** aims for providing information, if and by whom a piece skeleton was created. Skeleton pieces are placeholders, if the owning party does not provide piece information (usually the Shipper). In that case, the totalGrossWeight of the shipment is evently distributed over the number of pieces, and thus pieces skeletons are created with a generic UPID. If the field is filled with content, piece skeletons were created, if left blank, piece information is available. Piece skeletons can be created by any party. Once piece skeletons are used, they are to be used along the supply chain for any piece-level purpose, instead of creating new piece skeletons by downflow parties.
+If created from a shipment for the purpose for having a particular service performed on a piece it will hold the ***company*** which created it and likely is the booker.
+
+## ULD LO - !!!
+
+Holds general data about a given ULD which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
 
 
-## ClimateEffect LO
+## transportMovement LO - !!!
 
-The ***climateEffect*** LO is the Logistics Object documenting the effective climate impact of the transportation of the piece. Each stakeholder should quantify the effect for his own part of the transportation chain, meaning the carrier should provide information for all legs under the MAWB contract, including flight legs, RFS, etc., the forwarder should provide all transportation legs under his control (usually the HAWB), including the carriers legs, etc. To clearly indicate these "embedded" emissions, a climateEffect can contain "embedded" climateEffects.
+Holds general data about a given transport segment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
 
-### Data field: CO2equivalentWTW
+## shipment LO - !!!
 
-**tbd**
+Holds general data about a given shipment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
 
-### Data field: CO2equivalentTTW
+## serviceOptionRequest LO - !!!
 
-**tbd**
+Holds the initial request of a booker with a link towards a ***serviceProduct*** (1:1 link) of a provider and (a) link(s) to a ***piece***, ***ULD***, ***transportMovement***, and ***shipment*** (1:1 or 1:n link). Links to (a) ***serviceOption***(s) (1:1 or 1:n link) upon creation by the provider. At the minimum, it needs to include information about the service requested, the booker (or: the party who authorized the booker), and the status of the request. Those are to be modelled as the following data fields: ***serviceName***, ***requestor***, ***requestAuthorizedBy***, ***requestStatus***.
 
-### Data field: MethodName
+### Data field: serviceName
 
-This field contains the name of the method applied.
+Holds the name of the requested service as a *String*. Used in conjunction with data field ***requestStatus*** to quickly iterate through LOs and fetch booked services.
 
-### Data field: MethodVersion
+### Data fields: requestor and requestAuthorizedBy
 
-This field contains the version of the method calculation, if available.
+Holds the *Company* booking a service and, if the booker is booking on behalf of another company, optionally the *Company* on which behalf the request was started.
 
-### Data field: MethodLink
+### Data field: requestStatus - !!!
 
-This data field contains a URL to more details on the calculation method applied.
+Holds the status of the request as a yet unspecified data type. As a minimum, it needs to show the following statuses: accepted by provider, rejected by provider, cancelled by booker, pending by booker, pending by provider. POSTed by booker, status and link PATCHed by booker and provider.
 
-### Data field: Verification
+An implementation as *Integer* could look like:
+0 - pending by provider
+1 - pending by booker
+2 - accepted by provider
+3 - rejected by provider
+4 - cancelled by booker
 
-**tbd**
+## serviceProduct LO - !!!
 
-### Data field: Accreditation
+Static object. Holds any service offered by a provider company. Links to multiple ***serviceOptionRequests*** from bookers (1:n link) and ***serviceOptions*** (1:n link) generated from accepted ***serviceOptionRequest***s. Includes datafields ***serviceName***, ***serviceProvider***, ***serviceType***. POSTed and hosted by the service provider.
 
-**tbd**
+## serviceOption LO - !!!
 
-### Data field: TransportActivity
-
-### Data field:  includedClimateEffects
-
-This data field contains linked climateEffect calculation of embedded transport activites (see remarks above) 
-
+Holds necessary information about the offered service. Furthermore, it includes potentially required additional data to be filled in by the booker if not fetchable from other LOs through ONE Record. Links to one ***serviceProduct*** (1:1 link) of the provider and one ***serviceOptionRequest*** (1:1 link) of the booker. Minimal information required are specific for each service, thus, require further consultation.
 
 # API use
 
@@ -285,10 +207,12 @@ This data field contains linked climateEffect calculation of embedded transport 
 
 ## Additional comments / FAQs
 
+## Offene Themen
+
+Zeitliche Komponente in ONE Record? Über Metadaten oder Request/Service Zeit angeben?
+
+Grundlegende Idee: Integerbasierte Auswahl von Standard Services.
+
 ### How do we deal with missing piece information?
 
-Principally, the ONE Record data model is based on the piece. Thus the ***climateImpact*** LO is linked to the piece, never the shipment. Thus we seem to have a problem, if e.g. the weights of each piece are missing, as this is a relevant factor for climate Impact calculation. 
-
-But even if *detailed* piece information are not available, the number of pieces is usually available. In that case, the ***totalGrossWeight*** of the shipment is divided over the number of pieces. Meaning that it is assumed that all pieces have the same weight. This procedure is called the "use of piece skeletons". But this approach is only to be applied, if there´s no piece information available. If piece information are available, they must be taken into account for the climate impact calculation.
-
-If a consumer wants to consume the ***climateImpact*** on shipment level, it is required to sum up the ***climateImpact*** of all pieces within the shipment. Providing the climate impact on shipment level is not possible within ONE Record.
+TBD if necessary
