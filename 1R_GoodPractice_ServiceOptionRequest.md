@@ -1,6 +1,6 @@
-# Enabling the use of generic Services in ONE Record
+# Enabling the booking of generic services in ONE Record
 
-- [Enabling the use of generic Services in ONE Record](#enabling-generic-services-in-one-record)
+- [Enabling the booking of generic services in ONE Record](#enabling-generic-services-in-one-record)
   * [Basic Information on this document](#basic-information-on-this-document)
     + [Objective](#objective)
     + [Target audience](#target-audience)
@@ -17,41 +17,16 @@
   * [Solution approach](#solution-approach)
   * [Solution in current environment](#solution-in-current-environment)
 - [Data use and target process](#data-use-and-target-process)
-  * [transportMovement LO](#transportmovement-lo)
-    + [Data fields: distanceMeasured and distanceCalculated](#data-fields--distancemeasured-and-distancecalculated)
-    + [Data field: fuelType](#data-field--fueltype)
-    + [Data fields: fuelAmountMeasured and fuelAmountCalculated](#data-fields--fuelamountmeasured-and-fuelamountcalculated)
-    + [Data field: totalLoadedWeight](#data-field--totalloadedweight)
-  * [payloadDistance LO](#payloaddistance-lo)
-    + [Data field: payloadDistanceResult (value)](#data-field--payloaddistanceresult--value-)
-    + [ISOTransparencyLevel (int)](#isotransparencylevel--int-)
-    + [FuelConsumptionParameter](#fuelconsumptionparameter)
-    + [DistanceParameter](#distanceparameter)
-    + [CO2CoefficiencyFactor](#co2coefficiencyfactor)
-    + [Other data fields](#other-data-fields)
-  * [transportMeans LO](#transportmeans-lo)
-    + [Data field: typicalFuelConsumption](#data-field--typicalfuelconsumption)
-    + [Data field: typicalCO2Coefficient](#data-field--typicalco2coefficient)
-    + [Data field:](#data-field-)
-  * [piece LO](#piece-lo)
-    + [Data field: grossWeight](#data-field--grossweight)
-    + [Data field: skeletonBy](#data-field--skeletonby)
-  * [ClimateEffect LO](#climateeffect-lo)
-    + [Data field: CO2equivalentWTW](#data-field--co2equivalentwtw)
-    + [Data field: CO2equivalentTTW](#data-field--co2equivalentttw)
-    + [Data field: MethodName](#data-field--methodname)
-    + [Data field: MethodVersion](#data-field--methodversion)
-    + [Data field: MethodLink](#data-field--methodlink)
-    + [Data field: Verification](#data-field--verification)
-    + [Data field: Accreditation](#data-field--accreditation)
-    + [Data field: TransportActivity](#data-field--transportactivity)
-    + [Data field:  includedClimateEffects](#data-field---includedclimateeffects)
+  * [XXXX](#transportmovement-lo)
+    + [XXXX](#data-fields--distancemeasured-and-distancecalculated)
+  
 - [API use](#api-use)
     + [Technical setting](#technical-setting)
     + [Basic API-Features used](#basic-api-features-used)
   * [Results / Summary](#results---summary)
   * [Additional comments / FAQs](#additional-comments---faqs)
-    + [How do we deal with missing piece information?](#how-do-we-deal-with-missing-piece-information-)
+
+
 ## Basic Information on this document
 
 ### Objective 
