@@ -116,31 +116,30 @@ The status of a service (acceptance/rejection) has to be visible to booker and p
 
 The ONE Record data model follows two principles: Piece-centricity and physics-orientation. Piece-centricity is self-explanatory, as every information is linked with the piece as the lowest available transportation object. Physics-orientation means that the linking strucutre of ONE Record follows the structures of the physical world (for more details, please refer to [ONE Record Github Repository](https://github.com/IATA-Cargo/ONE-Record).
 
-The problem here is that the two principles are "collading" by some aspects here: The CO2-Emissions happen to the ***TransportMeans*** as trucks and planes burn fuel, not pieces or shipments. On the other hand, it would not help a data consumer to know that the aircraft with it´s piece onboard burnt a specific ammount of fuel without a brakedown to it´s piece. To close this gap, a set of data objects and process descriptions is described here to enable end-to-end, multi-modal CO2 tracking throughout the supply chain.
+Building on the principle of physics-orientation, generic services shall be bookable for any given physical object. Offering and booking services on piece-level is however, the recommended best practice, satisfying the principle of piece-orientation.
 
-The vision of this approach is to give even to consumers a transparency on CO2 emissions potentially from the production site to his door, covering all movement of the piece.
+The suggested data model addition follows closely the implementation of handling bookings with air carriers with its various distribution logistics objects as per business ontology version of ONE Record linked in the standards applied section of this document. 
 
-Principally, the approach does not define a CO2-Emission calculation methode, but supports any methode, and even the option of providing results for different calculation methods. It also enables transparency on the calculation parameters (fuel burnt, distances, etc.), their acquisition methode (measured, calculated), so a data consumer could potentially apply his own calculation method.
+The overall vision is that stakeholders can use ONE Record as API for handling any additional process-relevant service in bilateral and multilateral environments. These services may be monetized, but can also be "free of charge" and be used to transmit a location-specific piece of information required to have a provider feed a given physical unit into the correct process.
+
+It has to be noted that, as of version v1 of this document, pricing and rating features are not yet modelled akin to the distribution logistic objects as to keep the approach clean and simple. Nevertheless, if demand arises through fitting user stories, an addition is possible.
 
 ## Solution in current environment
 
-In the legacy messaging environment, end to end CO2 emission tracking on piece level isn´t possible. Generic solutions for transparency on shipment level are in place, but don´t follow a standardized approach for different modes of transportation.
+In the legacy environment, there is no world-wide generally accepted standard to transmit service requests for any physical unit of air freight. Instead, various location- or stakeholder-specific solutions are used. These include print-outs, phone calls, telefax, e-mails, and own handling system to handling system APIs.
 
 # Data use and target process
 
-Climate relevant emissions are performed by a ***transportMeans*** on a ***transportMovement***, because a ***transportMeans*** does not produce emissions by itself (e.g. a plane that isn´t flying), the primary attribution of CO2-Emissions is linked with the ***transportMovement***. The ***transportMovement*** can be any movement of pieces, like a Truck leg, a flight, or even a forklift-movement. 
+A ***serviceOptionRequest*** can be added for any logistic object consolidating (physical) freight, namely ***piece***, ***ULD***, ***transportMovement*** and ***shipment***. A ***serviceOptionRequest*** is created by a booker and links a static (@Philipp: Korrekter Begriff für solche LOs wie auch TransportMeans?) ***serviceProduct*** hosted by the provider, requiring a PATCH by the provider. Upon acceptance, the provider creates a ***serviceOption*** linking the ***serviceOptionRequest*** to approve the willingness to provide a service to the booker and optionally gathering more information to provide the service, and the ***serviceProduct*** as reference.
 
-While all climate data exchange around ***transportMeans*** and ***transportMovement*** serves for submitting the data basis for climate impact calculation between different stakeholders of the supply chain, the following climate impact data on piece level serves to fulfill the estimation of the actual impact of the transport on the climate.
-
-
-
-|   	|Physical object with climate impacting emissions|Climate impacting attributions on piece level|
-|---	|---	|---	|
-|Focus LOs  	|***transportMeans***, ***TransportMovement***, ***payloadDistance***|***piece***, ***climateEffect***|
-|Example|RFS Truck from AMS to CDG caused 12t  
-|Purpose|Provide basic data for climate impact calculation on piece level|Provide transparency on climate impact of transport on piece level|
-|Provider of data	|Operators (Airline, Trucking Company, etc.)|"Supply chain orchestrators" (can be airlines, forwarders, booking platforms)|
-|Target Group / Data consumers |"Supply chain orchestrators" (can be airlines, forwarders, booking platforms)|Shippers, end customers, etc.|
+|   	|Explanation
+|---	|---	
+|Focus LOs  	|***piece***, ***ULD***, ***transportMovement***, ***shipment***
+|New LOs  	|***serviceOptionRequest***, ***serviceProduct***, ***serviceOption***
+|Example| A forwarder (booker) wants ULD 123 to be routed to handover point X upon unloading on apron by GHA (provider)
+|Purpose| Booking generic services and letting stakeholders know if a generic service is booked
+|Provider of data	| Object Owner (Focus LO), Booker (***serviceOptionRequest***) and provider (***serviceProduct***, ***serviceOption***)
+|Target Group / Data consumers | Any ONE Record user involved with physical processes
 
 The following diagram shows the relevant data fields in the ONE Record data model:
 
