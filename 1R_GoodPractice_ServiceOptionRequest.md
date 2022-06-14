@@ -1,6 +1,6 @@
-# Providing CO2 Transparency in ONE Record
+# Enabling the use of generic Services in ONE Record
 
-- [Providing CO2 Transparency in ONE Record](#providing-co2-transparency-in-one-record)
+- [Enabling the use of generic Services in ONE Record](#enabling-generic-services-in-one-record)
   * [Basic Information on this document](#basic-information-on-this-document)
     + [Objective](#objective)
     + [Target audience](#target-audience)
@@ -55,26 +55,26 @@
 ## Basic Information on this document
 
 ### Objective 
-The purpose of this document is to provide a Good Practice for end2end and multi-modal CO2 emission transparency in the IATA ONE Record-based data eco-system.
+The purpose of this document is to provide a Good Practice for booking and using addtional, generic services through the ONE Record ecosystem.
 
 ### Target audience
 This document can be used by any party with the interest of using digital accompanying documents in ONE Record. 
 
 ### Geographical coverage
-As there are no legal or operational restrictions, the solution can be used world wide.
+As there are no legal or operational restrictions, the solution can be used worldwide.
 
 ### Creators
 This document is the outcome of a ONE Record pilot project with the "Digitales Testfeld Air Cargo" by the German air cargo community. Parties/Persons involved were:
 
-Lufthansa Cargo, Philipp Billion
-
-Souvereign, Heidi Han Yin Luu
-
-Souvereign, Moritz Tölke
+Institute for Aviation & Tourism of Frankfurt University of Applied Sciences, Niclas Scheiber
 
 Fraunhofer IML, Oliver Ditz
 
-Lufthansa Industry Solutions, Daniel Döppner
+Lufthansa Cargo, Philipp Billion
+
+Fraport, Athanasios Papakarmesis
+
+Fraport, Andreas Quick
 
 ### Continous development and availability
 
@@ -104,9 +104,13 @@ The ONE Record API and security specification draft witout a version as of APR 1
 
 ## Assumptions
 
-One or more stakeholders are able to provide CO2 transparency on their segments of the transport, other stakeholders are interested and capable of consuming this data.
+One or more stakeholders, hereafter the booker, want to book an additional service for any given logistics object with another stakeholder, hereafter the provider. Alternatively, the provider might want to have a booker book a service to ensure the logistics object in processual possession of a booker is fed into the correct process of the provider.
 
-A central assumption is that there is an interest of stakeholders to recieve CO2 transparency on piece level, end2end, multi-modal.
+The booker has knowledge of the offered services and knows the respective URIs. The booker requests a particular service from a provider.
+
+The provider has the power to accept or reject a service. The provider can have the booker fill in certain parameters defined by the provider.
+
+The status of a service (acceptance/rejection) has to be visible to booker and provider alike. Visilibity may be delegated to other stakeholders of the transport chain.
 
 ## Solution approach
 
