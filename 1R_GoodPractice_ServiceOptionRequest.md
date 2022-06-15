@@ -85,7 +85,7 @@ The booker has knowledge of the offered services and knows the respective URIs. 
 
 The provider has the power to accept or reject a service. The provider can have the booker fill in certain parameters defined by the provider.
 
-The status of a service (acceptance/rejection) has to be visible to booker and provider alike. Visilibity may be delegated to other stakeholders of the transport chain.
+The status of a service (acceptance/rejection) has to be visible to booker and provider alike. Visibility of a booked service may be delegated to other stakeholders of the transport chain.
 
 ## Solution approach
 
@@ -105,7 +105,7 @@ In the legacy environment, there is no world-wide generally accepted standard to
 
 # Data use and target process
 
-A ***serviceOptionRequest*** can be added for any logistic object consolidating (physical) freight, namely ***piece***, ***ULD***, ***transportMovement*** and ***shipment***. A ***serviceOptionRequest*** is created by a booker and links a static (@Philipp: Korrekter Begriff für solche LOs wie auch TransportMeans?) ***serviceProduct*** hosted by the provider, requiring a PATCH by the provider. Upon acceptance, the provider creates a ***serviceOption*** linking the ***serviceOptionRequest*** to approve the willingness to provide a service to the booker and optionally gathering more information to provide the service, and the ***serviceProduct*** as reference.
+A ***serviceOptionRequest*** can be added for any logistic object (LO) consolidating (physical) freight, namely ***piece***, ***ULD***, ***transportMovement*** and ***shipment***. A ***serviceOptionRequest*** is created by a booker and links a static (@Philipp: Korrekter Begriff für solche LOs wie auch TransportMeans?) ***serviceProduct*** hosted by the provider, requiring a PATCH by the provider. Upon acceptance, the provider creates n ***serviceOption***s for all valid bookable options for the booker, each linking the ***serviceOptionRequest*** to keep the direct connection to the LO for which a service is booked, and the ***serviceProduct*** as reference.
 
 |   	|Explanation
 |---	|---	
@@ -143,7 +143,9 @@ Holds general data about a given shipment which may be included for determining 
 
 ## serviceOptionRequest LO - !!!
 
-Holds the initial request of a booker with a link towards a ***serviceProduct*** (1:1 link) of a provider and (a) link(s) to a ***piece***, ***ULD***, ***transportMovement***, and ***shipment*** (1:1 or 1:n link). Links to (a) ***serviceOption***(s) (1:1 or 1:n link) upon creation by the provider. At the minimum, it needs to include information about the service requested, the booker (or: the party who authorized the booker), and the status of the request. Those are to be modelled as the following data fields: ***serviceName***, ***requestor***, ***requestAuthorizedBy***, ***requestStatus***.
+Holds the initial request of a booker with a link towards a ***serviceProduct*** (1:1 link) of a provider and (a) link(s) to a ***piece***, ***ULD***, ***transportMovement***, and ***shipment*** (1:1 or 1:n link). Links to n ***serviceOption***s (1:n link) upon creation by the provider. At the minimum, it needs to include information about the service requested, the booker (or: the party who authorized the booker). Those are to be modelled as the following data fields: ***serviceName***, ***requestor***, ***requestAuthorizedBy***. 
+
+Additionally, a ***requestStatus*** can be added to more quickly iterate through all ***serviceOptionRequest***s of a given LO.
 
 ### Data field: serviceName
 
@@ -153,7 +155,7 @@ Holds the name of the requested service as a *String*. Used in conjunction with 
 
 Holds the *Company* booking a service and, if the booker is booking on behalf of another company, optionally the *Company* on which behalf the request was started.
 
-### Data field: requestStatus - !!!
+### Optional data field: requestStatus - to be discussed
 
 Holds the status of the request as a yet unspecified data type. As a minimum, it needs to show the following statuses: accepted by provider, rejected by provider, cancelled by booker, pending by booker, pending by provider. POSTed by booker, status and link PATCHed by booker and provider.
 
@@ -164,13 +166,32 @@ An implementation as *Integer* could look like:
 3 - rejected by provider
 4 - cancelled by booker
 
-## serviceProduct LO - !!!
+## serviceProduct LO
 
-Static object. Holds any service offered by a provider company. Links to multiple ***serviceOptionRequests*** from bookers (1:n link) and ***serviceOptions*** (1:n link) generated from accepted ***serviceOptionRequest***s. Includes datafields ***serviceName***, ***serviceProvider***, ***serviceType***. POSTed and hosted by the service provider.
+Static object. Holds any service offered by a provider company. Links to multiple ***serviceOptionRequests*** from bookers (1:n link) and multiple ***serviceOption***s (1:n link) generated for any ***serviceOptionRequest*** linked to it. Includes datafields ***serviceName*** and ***serviceProvider***. POSTed and hosted by the service provider.
 
-## serviceOption LO - !!!
+Versioning is necessary when the service offered changes and, as of this draft, to be handled via audit trail.
 
-Holds necessary information about the offered service. Furthermore, it includes potentially required additional data to be filled in by the booker if not fetchable from other LOs through ONE Record. Links to one ***serviceProduct*** (1:1 link) of the provider and one ***serviceOptionRequest*** (1:1 link) of the booker. Minimal information required are specific for each service, thus, require further consultation.
+Additionally, data fields ***serviceType*** and ***serviceDescription*** may be added to categorize services in company-specific or yet-to-be-defined industry-wide categories and to provide bookers with more in-detail human-readable information respectively.
+
+### Data field: serviceName
+
+Holds the name of the requested service as a *String*. Used to validate with linked ***serviceOptionRequest***s and to provide a short description of the service to the booker.
+
+### Data field: serviceProvider
+
+Holds the *Company* providing the service.
+
+### Optional data fields: serviceType and serviceDescription
+
+Hold the type of the service and a detailed, human-readable description of the service as *String*s.
+
+## serviceOption LO
+
+Holds necessary information about a service option to be selected by the booker. At the minimum, has to include information about its status, matching with a request and information about the consequences of booking this specific option. Links to one ***serviceProduct*** (1:1 link) of the provider and one ***serviceOptionRequest*** (1:1 link) of the booker. Includes datafields ***serviceStatus***, ***requestMatchInd*** and ***serviceDescription***.
+
+Additionally, ***validFrom*** and ***validTo*** data fields might be added to handle cases where offers have a limited time of validity. However, no user story exists just yet.
+
 
 # API use
 
