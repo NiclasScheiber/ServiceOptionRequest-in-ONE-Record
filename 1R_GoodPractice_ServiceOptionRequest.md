@@ -16,10 +16,7 @@
   * [Assumptions](#assumptions)
   * [Solution approach](#solution-approach)
   * [Solution in current environment](#solution-in-current-environment)
-- [Data use and target process](#data-use-and-target-process)
-  * [XXXX](#transportmovement-lo)
-    + [XXXX](#data-fields--distancemeasured-and-distancecalculated)
-  
+- [Data use and target process](#data-use-and-target-process)  
 - [API use](#api-use)
     + [Technical setting](#technical-setting)
     + [Basic API-Features used](#basic-api-features-used)
@@ -120,6 +117,8 @@ The following diagram shows the relevant data fields in the ONE Record data mode
 
 ![DataModel](docs/dm2.svg)
 
+Hereafter, the minimum required relevant LOs and data fields are briefly described.
+
 ## piece LO - !!!
 
 Holds general data about a given piece which may be included for determining whether a specific service can be provided or not or calculating service prices. ***skeletonBy*** holds the company (@Philipp: richtig?) that has created a skeleton. Links towards any number of serviceOptionRequests (1:n or n:n link).
@@ -128,20 +127,20 @@ Holds general data about a given piece which may be included for determining whe
 
 If created from a shipment for the purpose for having a particular service performed on a piece it will hold the ***company*** which created it and likely is the booker.
 
-## ULD LO - !!!
+## ULD LO
 
 Holds general data about a given ULD which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
 
 
-## transportMovement LO - !!!
+## transportMovement LO
 
 Holds general data about a given transport segment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
 
-## shipment LO - !!!
+## shipment LO
 
 Holds general data about a given shipment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
 
-## serviceOptionRequest LO - !!!
+## serviceOptionRequest LO
 
 Holds the initial request of a booker with a link towards a ***serviceProduct*** (1:1 link) of a provider and (a) link(s) to a ***piece***, ***ULD***, ***transportMovement***, and ***shipment*** (1:1 or 1:n link). Links to n ***serviceOption***s (1:n link) upon creation by the provider. At the minimum, it needs to include information about the service requested, the booker (or: the party who authorized the booker). Those are to be modelled as the following data fields: ***serviceName***, ***requestor***, ***requestAuthorizedBy***. 
 
@@ -188,10 +187,23 @@ Hold the type of the service and a detailed, human-readable description of the s
 
 ## serviceOption LO
 
-Holds necessary information about a service option to be selected by the booker. At the minimum, has to include information about its status, matching with a request and information about the consequences of booking this specific option. Links to one ***serviceProduct*** (1:1 link) of the provider and one ***serviceOptionRequest*** (1:1 link) of the booker. Includes datafields ***serviceStatus***, ***requestMatchInd*** and ***serviceDescription***.
+Holds necessary information about a service option to be selected by the booker. At the minimum, has to include information about its status, matching with a request and information about the consequences of booking this specific option. Links to one ***serviceProduct*** (1:1 link) of the provider and one ***serviceOptionRequest*** (1:1 link) of the booker. Includes datafields ***serviceStatus***, ***requestMatchInd*** and ***serviceDescription***. POSTed by provider.
 
 Additionally, ***validFrom*** and ***validTo*** data fields might be added to handle cases where offers have a limited time of validity. However, no user story exists just yet.
 
+### Data field: serviceStatus
+Holds the service status as *String* (offered, confirmed, ...)
+
+### Data field: requestMatchInd - !!!!
+Holds *Boolean* indicating that (@Philipp?)
+
+### Data field: serviceDescription - !!!!
+Describes the service offered with this particular option as a *String*. 
+
+Best practice: Should not be identical to any other serviceDescription of other ***serviceOption LO***s linked to the same ***serviceOptionRequest LO***.
+
+### Optional data fields: validFrom and validTo
+Holds, if required, the times between the option is valid as *Datetime*.
 
 # API use
 
@@ -205,9 +217,9 @@ Additionally, ***validFrom*** and ***validTo*** data fields might be added to ha
 
 ## Offene Themen
 
-Zeitliche Komponente in ONE Record? Über Metadaten oder Request/Service Zeit angeben?
+Wie wissen auf welchen Flug sich was bezieht?
 
-Grundlegende Idee: Integerbasierte Auswahl von Standard Services.
+ULD Problematik!!
 
 ### How do we deal with missing piece information?
 
