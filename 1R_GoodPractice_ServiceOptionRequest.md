@@ -38,7 +38,7 @@ As there are no legal or operational restrictions, the solution can be used worl
 ### Creators
 This document is the outcome of a ONE Record pilot project with the "Digitales Testfeld Air Cargo" by the German air cargo community. Parties/Persons involved were:
 
-Institute for Aviation & Tourism of Frankfurt University of Applied Sciences, Niclas Scheiber
+Frankfurt University of Applied Sciences/IAT, Niclas Scheiber
 
 Fraunhofer IML, Oliver Ditz
 
