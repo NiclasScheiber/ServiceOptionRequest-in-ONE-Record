@@ -30,7 +30,7 @@
 The purpose of this document is to provide a Good Practice for booking and using addtional, generic services through the ONE Record ecosystem.
 
 ### Target audience
-This document can be used by any party with the interest of using digital accompanying documents in ONE Record. 
+This document can be used by any party with the interest of providing the booking and using addtional, generic services through the ONE Record ecosystem. 
 
 ### Geographical coverage
 As there are no legal or operational restrictions, the solution can be used worldwide.
@@ -80,7 +80,7 @@ One or more stakeholders, hereafter the booker, want to book an additional servi
 
 The booker has knowledge of the offered services and knows the respective URIs. The booker requests a particular service from a provider.
 
-The provider has the power to accept or reject a service. The provider can have the booker fill in certain parameters defined by the provider.
+The provider has the power to accept or reject a service. The provider can have the booker select from multiple service options.
 
 The status of a service (acceptance/rejection) has to be visible to booker and provider alike. Visibility of a booked service may be delegated to other stakeholders of the transport chain.
 
@@ -94,7 +94,7 @@ The suggested data model addition follows closely the implementation of handling
 
 The overall vision is that stakeholders can use ONE Record as API for handling any additional process-relevant service in bilateral and multilateral environments. These services may be monetized, but can also be "free of charge" and be used to transmit a location-specific piece of information required to have a provider feed a given physical unit into the correct process.
 
-It has to be noted that, as of version v1 of this document, pricing and rating features are not yet modelled akin to the distribution logistic objects as to keep the approach clean and simple. Nevertheless, if demand arises through fitting user stories, an addition is possible.
+It has to be noted that, as of this version of this document, pricing and rating features are not yet modelled akin to the distribution logistic objects as to keep the approach clean and simple. Nevertheless, if demand arises through fitting user stories, an addition is possible.
 
 ## Solution in current environment
 
@@ -115,14 +115,14 @@ A ***serviceOptionRequest*** can be added for any logistic object (LO) consolida
 
 The following diagram shows the relevant data fields in the ONE Record data model:
 
-![DataModel](docs/ServiceRequestDiagram.drawio.svg)
+![DataModel](docs/docs/ServiceRequestDiagram (3)_reduced.drawio.svg)
 
 
 Hereafter, the minimum required relevant LOs and data fields are briefly described.
 
 ## piece LO - !!!
 
-Holds general data about a given piece which may be included for determining whether a specific service can be provided or not or calculating service prices. ***skeletonBy*** holds the company (@Philipp: richtig?) that has created a skeleton. Links towards any number of serviceOptionRequests (1:n or n:n link).
+Holds general data about a given piece which may be included for determining whether a specific service can be provided or not or calculating service prices. ***skeletonBy*** holds the company (@Philipp: richtig?) that has created a skeleton. Links towards any number of serviceOptionRequests (1:n link).
 
 ### Data field: skeletonBy
 
@@ -130,20 +130,19 @@ If created from a shipment for the purpose for having a particular service perfo
 
 ## ULD LO
 
-Holds general data about a given ULD which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
-
+Holds general data about a given ULD which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n link).
 
 ## transportMovement LO
 
-Holds general data about a given transport segment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
+Holds general data about a given transport segment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n link).
 
 ## shipment LO
 
-Holds general data about a given shipment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n or n:n link).
+Holds general data about a given shipment which may be included for determining whether a specific service can be provided or not or calculating service prices. Links towards any number of ***serviceOptionRequests*** (1:n link).
 
 ## serviceOptionRequest LO
 
-Holds the initial request of a booker with a link towards a ***serviceProduct*** (1:1 link) of a provider and (a) link(s) to a ***piece***, ***ULD***, ***transportMovement***, and ***shipment*** (1:1 or 1:n link). Links to n ***serviceOption***s (1:n link) upon creation by the provider. At the minimum, it needs to include information about the service requested, the booker (or: the party who authorized the booker). Those are to be modelled as the following data fields: ***serviceName***, ***requestor***, ***requestAuthorizedBy***. 
+Holds the initial request of a booker with a link towards a ***serviceProduct*** (n:1 link) of a provider and a link to a ***piece***, ***ULD***, ***transportMovement***, and ***shipment*** (n:1 link). Links to n ***serviceOption***s (1:n link) upon creation by the provider. At the minimum, it needs to include information about the service requested, the booker (or: the party who authorized the booker). Those are to be modelled as the following data fields: ***serviceName***, ***requestor***, ***requestAuthorizedBy***. 
 
 Additionally, a ***requestStatus*** can be added to more quickly iterate through all ***serviceOptionRequest***s of a given LO.
 
@@ -170,7 +169,7 @@ An implementation as *Integer* could look like:
 
 Static object. Holds any service offered by a provider company. Links to multiple ***serviceOptionRequests*** from bookers (1:n link) and multiple ***serviceOption***s (1:n link) generated for any ***serviceOptionRequest*** linked to it. Includes datafields ***serviceName*** and ***serviceProvider***. POSTed and hosted by the service provider.
 
-Versioning is necessary when the service offered changes and, as of this draft, to be handled via audit trail.
+Versioning is necessary when the service offered changes and is, as of this draft, to be handled via audit trail.
 
 Additionally, data fields ***serviceType*** and ***serviceDescription*** may be added to categorize services in company-specific or yet-to-be-defined industry-wide categories and to provide bookers with more in-detail human-readable information respectively.
 
@@ -188,7 +187,7 @@ Hold the type of the service and a detailed, human-readable description of the s
 
 ## serviceOption LO
 
-Holds necessary information about a service option to be selected by the booker. At the minimum, has to include information about its status, matching with a request and information about the consequences of booking this specific option. Links to one ***serviceProduct*** (1:1 link) of the provider and one ***serviceOptionRequest*** (1:1 link) of the booker. Includes datafields ***serviceStatus***, ***requestMatchInd*** and ***serviceDescription***. POSTed by provider.
+Holds necessary information about a service option to be selected by the booker. At the minimum, has to include information about its status, matching with a request and information about the consequences of booking this specific option. Links to one ***serviceProduct*** (n:1 link) of the provider and one ***serviceOptionRequest*** (n:1 link) of the booker. Includes datafields ***serviceStatus***, ***requestMatchInd*** and ***serviceDescription***. POSTed by provider.
 
 Additionally, ***validFrom*** and ***validTo*** data fields might be added to handle cases where offers have a limited time of validity. However, no user story exists just yet.
 
@@ -198,7 +197,7 @@ Holds the service status as *String* (offered, confirmed, ...)
 ### Data field: requestMatchInd - !!!!
 Holds *Boolean* indicating that (@Philipp?)
 
-### Data field: serviceDescription - !!!!
+### Data field: serviceDescription
 Describes the service offered with this particular option as a *String*. 
 
 Best practice: Should not be identical to any other serviceDescription of other ***serviceOption LO***s linked to the same ***serviceOptionRequest LO***.
