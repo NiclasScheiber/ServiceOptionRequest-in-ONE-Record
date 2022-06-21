@@ -115,7 +115,7 @@ A ***serviceOptionRequest*** can be added for any logistic object (LO) consolida
 
 The following diagram shows the relevant data fields in the ONE Record data model:
 
-![DataModel](docs/docs/ServiceRequestDiagram (3)_reduced.drawio.svg)
+![DataModel](docs/ServiceRequestDiagram (3)_reduced.drawio.svg)
 
 
 Hereafter, the minimum required relevant LOs and data fields are briefly described.
